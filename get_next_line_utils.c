@@ -6,16 +6,15 @@
 /*   By: klafi <klafi@learner.42.tech>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 15:08:00 by klafi             #+#    #+#             */
-/*   Updated: 2026/01/01 12:12:10 by klafi            ###   ########.fr       */
+/*   Updated: 2026/01/01 16:13:43 by klafi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-node	**lst_new(int fd)
+node	*lst_new(int fd)
 {
 	node	*nd;
-	node	**list;
 	char	*buff;
 
 	nd = malloc(sizeof (node));
@@ -25,24 +24,25 @@ node	**lst_new(int fd)
 	nd -> next = NULL;
 	nd -> prev = NULL;
 	nd -> len = read(fd, buff, BUFFER_SIZE);
+	if (nd -> len == -1)
+		return (NULL);
 	nd -> str = buff;
-	list = &nd;
-	return (list);
+	return (nd);
 }
 
-node	*lst_add_back(node **list, int fd)
+node	*lst_add_back(node *list, int fd)
 {
-	node	**temp;
+	node	*temp;
 	node	*new;
 
 	temp = list;
-	new = *lst_new(fd);
+	new = lst_new(fd);
 	if (!new)
 		return (NULL);
-	while ((*temp) -> next)
-		(*temp) = (*temp) -> next;
-	new -> prev = *temp;
-	(*temp) -> next = new;
+	while ((temp) -> next)
+		(temp) = (temp) -> next;
+	new -> prev = temp;
+	(temp) -> next = new;
 	return (new);
 }
 

@@ -6,7 +6,7 @@
 /*   By: klafi <klafi@learner.42.tech>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/01 11:46:50 by klafi             #+#    #+#             */
-/*   Updated: 2026/01/01 12:01:04 by klafi            ###   ########.fr       */
+/*   Updated: 2026/01/01 14:39:32 by klafi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,5 +15,8 @@
 int	main(void)
 {
 	int fd = open ("meow.txt", O_RDONLY);
-	printf("%s\n", get_next_line(fd));
+	int n = 0;
+	while (n++ < 10)
+		printf("%s", get_next_line(fd));
+	close(fd);
 }

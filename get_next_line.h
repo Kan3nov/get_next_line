@@ -6,7 +6,7 @@
 /*   By: klafi <klafi@learner.42.tech>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 14:57:58 by klafi             #+#    #+#             */
-/*   Updated: 2026/01/01 11:54:47 by klafi            ###   ########.fr       */
+/*   Updated: 2026/01/01 14:40:25 by klafi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ typedef struct ll_node
 	char			*str;
 	int				len;
 }	node;
-node	**lst_new(int fd);
-node	*lst_add_back(node **list, int fd);
+node	*lst_new(int fd);
+node	*lst_add_back(node *list, int fd);
 void	*ft_calloc(size_t n, size_t size);
 char	*get_next_line(int fd);
 

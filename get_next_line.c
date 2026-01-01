@@ -6,26 +6,26 @@
 /*   By: klafi <klafi@learner.42.tech>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/01 12:02:27 by klafi             #+#    #+#             */
-/*   Updated: 2026/01/01 12:33:15 by klafi            ###   ########.fr       */
+/*   Updated: 2026/01/01 16:25:05 by klafi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char *str_rev(int idx, node **list, int length)
+char *str_rev(int idx, node *list, int length)
 {
 	char 	*s;
-	node	**temp;
+	node	*temp;
 
 	temp = list;
-	s = ft_calloc(length + 1);
+	s = ft_calloc(1, length + 1);
 	s[length] = 0;
 	while (length--)
 	{
-		s[length] = ((*list) -> str)[idx];
+		s[length] = ((temp) -> str)[idx];
 		if (idx == 0)
 		{
-			*temp = (*temp) -> prev;
+			temp = (temp) -> prev;
 			idx = BUFFER_SIZE;
 		}
 		idx--;
@@ -33,34 +33,51 @@ char *str_rev(int idx, node **list, int length)
 	return (s);
 }
 
-char	*get_next_line(int fd)
+int	get_length(int *idx, node **list, int length, int fd)
 {
-	static node **list = NULL;
-	static int	idx = 0;
-	int			length;
-
-	length = 0;
-	if (!list)
-		list = new_lst(fd);
-	if (!list)
-		return (NULL);
-	while (idx < (*list) -> len)
+	if ((*idx) == BUFFER_SIZE)
+	{
+		*list = lst_add_back(*list, fd);
+		if (!*list)
+			return (-1);
+		*idx = 0;
+	}
+	while (*idx < (*list) -> len)
 	{
 		if ((*list) -> len == 0)
 			break ;
 		length++;
-		if (((*list) -> str)[idx] == '\n')
+		if (((*list) -> str)[(*idx)++] == '\n')
 			break ;
-		idx++;
-		if (idx == BUFFER_SIZE)
+		if (*idx == BUFFER_SIZE)
 		{
-			*list = lst_add_back(list, fd);
+			*list = lst_add_back(*list, fd);
 			if (!*list)
-				return (NULL);
-			idx = 0;
+				return (-1);
+			*idx = 0;
 		}
 	}
+	return (length);
+}
+
+char	*get_next_line(int fd)
+{
+	static node **list = NULL;
+	static node *head = NULL;
+	static int	idx;
+	int			length;
+
+	if (!list)
+	{
+		head = lst_new(fd);
+		list = &head;
+	}
+	if (!list || !head)
+		return (NULL);
+	length = get_length(&idx, list, 0, fd);
+	if (length == -1)
+		return (NULL);
 	if ((*list) -> len == 0 && length == 0)
 		return (NULL);
-	return (str_rev(idx, list, length));
+	return (str_rev(idx - 1, *list, length));
 }
