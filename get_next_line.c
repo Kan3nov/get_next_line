@@ -6,7 +6,7 @@
 /*   By: klafi <klafi@learner.42.tech>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/01 12:02:27 by klafi             #+#    #+#             */
-/*   Updated: 2026/01/01 16:25:05 by klafi            ###   ########.fr       */
+/*   Updated: 2026/01/01 17:50:38 by klafi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	get_length(int *idx, node **list, int length, int fd)
 			return (-1);
 		*idx = 0;
 	}
-	while (*idx < (*list) -> len)
+	while (*idx <= (*list) -> len)
 	{
 		if ((*list) -> len == 0)
 			break ;
@@ -68,12 +68,10 @@ char	*get_next_line(int fd)
 	int			length;
 
 	if (!list)
-	{
 		head = lst_new(fd);
-		list = &head;
-	}
-	if (!list || !head)
+	if (!head)
 		return (NULL);
+	list = &head;
 	length = get_length(&idx, list, 0, fd);
 	if (length == -1)
 		return (NULL);
