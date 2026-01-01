@@ -3,25 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: klafi <kanan.lafi@learner.42.tech>         +#+  +:+       +#+        */
+/*   By: klafi <klafi@learner.42.tech>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/26 19:55:54 by klafi             #+#    #+#             */
-/*   Updated: 2025/12/26 20:42:22 by klafi            ###   ########.fr       */
+/*   Created: 2025/12/29 14:57:58 by klafi             #+#    #+#             */
+/*   Updated: 2025/12/29 15:59:20 by klafi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-# ifndef BUFFER_SIZE
-# define BUFFER_SIZE 1
-# endif
-
-#include <unistd.h>
-#include <fcntl.h>
 #include <stdlib.h>
-//will be omitted after testing :
+#include <unistd.h>
+//the following libraries will be omitted after testing 
 #include <stdio.h>
-char	*get_next_line(int fd);
+#include <fcntl.c>
+
+#ifndef BUFFER_SIZE
+# define BUFFER_SIZE 2
+#endif
+
+typedef struct ll_node
+{
+	next	*ll_node;
+	prev	*ll_node;
+	char	str[2];
+	int		len;
+}	node;
 
 #endif

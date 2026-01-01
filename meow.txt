@@ -1,7 +1,1 @@
 hello
-my
-name
-is 
-kanana
-lafiii
-ddd\0
