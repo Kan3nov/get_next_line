@@ -6,7 +6,7 @@
 /*   By: klafi <klafi@learner.42.tech>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 15:08:00 by klafi             #+#    #+#             */
-/*   Updated: 2026/01/01 12:01:21 by klafi            ###   ########.fr       */
+/*   Updated: 2026/01/01 12:12:10 by klafi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ node	**lst_new(int fd)
 
 	nd = malloc(sizeof (node));
 	buff = ft_calloc(1, BUFFER_SIZE);
+	if (!nd || !buff)
+		return (NULL);
 	nd -> next = NULL;
 	nd -> prev = NULL;
 	nd -> len = read(fd, buff, BUFFER_SIZE);
@@ -35,6 +37,8 @@ node	*lst_add_back(node **list, int fd)
 
 	temp = list;
 	new = *lst_new(fd);
+	if (!new)
+		return (NULL);
 	while ((*temp) -> next)
 		(*temp) = (*temp) -> next;
 	new -> prev = *temp;
