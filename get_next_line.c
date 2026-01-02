@@ -6,34 +6,40 @@
 /*   By: klafi <klafi@learner.42.tech>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/01 12:02:27 by klafi             #+#    #+#             */
-/*   Updated: 2026/01/01 17:50:38 by klafi            ###   ########.fr       */
+/*   Updated: 2026/01/02 08:28:30 by klafi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char *str_rev(int idx, node *list, int length)
+char	*str_rev(int idx, t_node *list, int length)
 {
-	char 	*s;
-	node	*temp;
+	char	*s;
+	t_node	*temp;
 
 	temp = list;
+	if (idx < 0 && temp -> prev)
+	{
+		temp = (temp)-> prev;
+		idx = BUFFER_SIZE - 1;
+	}
+	else if (idx < 0)
+		idx = 0;
 	s = ft_calloc(1, length + 1);
 	s[length] = 0;
 	while (length--)
 	{
-		s[length] = ((temp) -> str)[idx];
-		if (idx == 0)
+		s[length] = ((temp)-> str)[idx];
+		if (idx-- == 0)
 		{
-			temp = (temp) -> prev;
-			idx = BUFFER_SIZE;
+			temp = (temp)-> prev;
+			idx = BUFFER_SIZE - 1;
 		}
-		idx--;
 	}
 	return (s);
 }
 
-int	get_length(int *idx, node **list, int length, int fd)
+int	get_length(int *idx, t_node **list, int length, int fd)
 {
 	if ((*idx) == BUFFER_SIZE)
 	{
@@ -42,12 +48,12 @@ int	get_length(int *idx, node **list, int length, int fd)
 			return (-1);
 		*idx = 0;
 	}
-	while (*idx <= (*list) -> len)
+	while (*idx < (*list)-> len)
 	{
-		if ((*list) -> len == 0)
+		if ((*list)-> len == 0)
 			break ;
 		length++;
-		if (((*list) -> str)[(*idx)++] == '\n')
+		if (((*list)-> str)[(*idx)++] == '\n')
 			break ;
 		if (*idx == BUFFER_SIZE)
 		{
@@ -62,10 +68,10 @@ int	get_length(int *idx, node **list, int length, int fd)
 
 char	*get_next_line(int fd)
 {
-	static node **list = NULL;
-	static node *head = NULL;
-	static int	idx;
-	int			length;
+	static t_node	**list = NULL;
+	static t_node	*head = NULL;
+	static int		idx;
+	int				length;
 
 	if (!list)
 		head = lst_new(fd);
@@ -75,7 +81,7 @@ char	*get_next_line(int fd)
 	length = get_length(&idx, list, 0, fd);
 	if (length == -1)
 		return (NULL);
-	if ((*list) -> len == 0 && length == 0)
+	if ((*list)-> len == idx && length == 0)
 		return (NULL);
 	return (str_rev(idx - 1, *list, length));
 }

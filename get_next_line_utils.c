@@ -6,18 +6,18 @@
 /*   By: klafi <klafi@learner.42.tech>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 15:08:00 by klafi             #+#    #+#             */
-/*   Updated: 2026/01/01 16:50:45 by klafi            ###   ########.fr       */
+/*   Updated: 2026/01/02 08:37:59 by klafi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-node	*lst_new(int fd)
+t_node	*lst_new(int fd)
 {
-	node	*nd;
+	t_node	*nd;
 	char	*buff;
 
-	nd = malloc(sizeof (node));
+	nd = malloc(sizeof (t_node));
 	buff = ft_calloc(1, BUFFER_SIZE);
 	if (!nd || !buff)
 		return (NULL);
@@ -25,24 +25,28 @@ node	*lst_new(int fd)
 	nd -> prev = NULL;
 	nd -> len = read(fd, buff, BUFFER_SIZE);
 	if (nd -> len == -1)
+	{
+		free(buff);
+		free (nd);
 		return (NULL);
+	}
 	nd -> str = buff;
 	return (nd);
 }
 
-node	*lst_add_back(node *list, int fd)
+t_node	*lst_add_back(t_node *list, int fd)
 {
-	node	*temp;
-	node	*new;
+	t_node	*temp;
+	t_node	*new;
 
 	temp = list;
 	new = lst_new(fd);
 	if (!new)
 		return (NULL);
-	while ((temp) -> next)
-		(temp) = (temp) -> next;
+	while ((temp)-> next)
+		(temp) = (temp)-> next;
 	new -> prev = temp;
-	(temp) -> next = new;
+	(temp)-> next = new;
 	return (new);
 }
 
