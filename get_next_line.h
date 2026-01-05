@@ -6,7 +6,7 @@
 /*   By: klafi <klafi@learner.42.tech>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 14:57:58 by klafi             #+#    #+#             */
-/*   Updated: 2026/01/02 07:52:20 by klafi            ###   ########.fr       */
+/*   Updated: 2026/01/05 13:57:09 by klafi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,13 @@
 #  define BUFFER_SIZE 1
 # endif
 
-typedef struct ll_node
+typedef struct meow
 {
-	struct ll_node	*next;
-	struct ll_node	*prev;
-	char			*str;
-	int				len;
-}	t_node;
-t_node	*lst_new(int fd);
-t_node	*lst_add_back(t_node *list, int fd);
-void	*ft_calloc(size_t n, size_t size);
+	char	*s;
+	int		len;
+}	t_line;
+
+int		find_nl(t_line line);
 char	*get_next_line(int fd);
 
 #endif
