@@ -6,102 +6,93 @@
 /*   By: klafi <klafi@learner.42.tech>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/05 10:15:05 by klafi             #+#    #+#             */
-/*   Updated: 2026/01/05 15:07:01 by klafi            ###   ########.fr       */
+/*   Updated: 2026/01/06 16:03:13 by klafi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-t_line	strjoin(t_line line, char *buf, int bytes)
+int	find_nl(t_buf *buf)
 {
-	char		*new;
-	int			idx;
-	int			old_bytes;
+	int	idx;
 
-	new = malloc(line.len + bytes);
-	old_bytes = bytes;
-	idx = -1;
-	while (++idx < line.len)
-		new[idx] = line.s[idx];
-	while (bytes-- > 0)
+	idx = buf->idx;
+	while (idx < buf->len)
 	{
-		new[idx] = buf[idx - line.len];
+		if (buf->s[idx] == '\n')
+			return (idx);
 		idx++;
 	}
-	free(buf);
-	if (line.len != 0)
-		free (line.s);
-	if (line.len == 0 && old_bytes == 0)
-		free(new);
-	line.s = new;
-	line.len = old_bytes + line.len;
-	return (line);
+	return (-1);
 }
 
-char	*substr(t_line line, int idx2)
+int	ft_strlen(char *str)
+{
+	int	len;
+
+	len = 0;
+	while (str[len])
+		len++;
+	return (len);
+}
+
+char	*strjoin(char *line, t_buf *buf)
 {
 	char	*new;
-	int		idx1;
+	int		idx;
+	int		len;
+	int		nl;
 
-	new = malloc(idx2 + 2);
-	idx1 = 0;
-	while (idx1 < idx2 + 1)
+	len = ft_strlen(line);
+	nl = find_nl(buf);
+	if (nl < 0 && buf->len >= 0)
+		nl = buf->len - 1;
+	new = malloc(len + (nl - buf->idx + 1) + 1);
+	idx = -1;
+	while (++idx < len)
+		new[idx] = line[idx];
+	while (buf->idx <= nl)
 	{
-		new[idx1] = line.s[idx1];
-		idx1++;
+		new[idx++] = buf->s[buf->idx];
+		buf->idx++;
 	}
-	new[idx1] = 0;
+	new[idx] = 0;
+	free(line);
 	return (new);
 }
 
-t_line	trim(t_line line, int idx2)
+int	in(char *s, char c)
 {
-	char	*new;
-	int		idx1;
-	int		new_len;
+	int	idx;
 
-	new_len = line.len - idx2 - 1;
-	if (new_len == 0)
-		new = "";
-	else
-		new = malloc (new_len + 1);
-	idx1 = 0;
-	while (idx1 < new_len)
-		new[idx1++] = line.s[++idx2];
-	free(line.s);
-	line.s = new;
-	line.len = new_len;
-	return (line);
-}
-
-char	*gnl(int fd, char *buf, int idx, int bytes)
-{
-	static t_line	line = {"", 0};
-	char			*new;
-
-	idx = find_nl(line);
-	while (idx < 0)
-	{
-		buf = malloc(BUFFER_SIZE);
-		bytes = read(fd, buf, BUFFER_SIZE);
-		if (bytes < 0)
-			return (free(buf), NULL);
-		line = strjoin(line, buf, bytes);
-		idx = find_nl(line);
-		if (bytes < BUFFER_SIZE && idx < 0)
-		{
-			idx = line.len - 1;
-			break ;
-		}
-	}
-	if (bytes == 0 && line.len <= 0)
-		return (NULL);
-	new = substr(line, idx);
-	line = trim(line, idx);
-	return (new);
+	idx = 0;
+	while (s[idx])
+		if (s[idx++] == c)
+			return (idx);
+	return (-1);
 }
 
 char	*get_next_line(int fd)
 {
-	return (gnl(fd, "", 0, 0));
+	static t_buf	buf = {"", 0, 0};
+	char			*line;
+
+	line = malloc(1);
+	line[0] = 0;
+	while (in(line, '\n') == -1)
+	{
+		if (buf.idx == buf.len)
+		{
+			buf.len = read(fd, buf.s, BUFFER_SIZE);
+			buf.idx = 0;
+		}
+		line = strjoin(line, &buf);
+		if (!buf.len)
+			break ;
+		else if (buf.len < 0)
+			return (free(line), NULL);
+	}
+	if (!buf.len && !ft_strlen(line))
+		return (free(line), NULL);
+	return (line);
 }

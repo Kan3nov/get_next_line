@@ -6,7 +6,7 @@
 /*   By: klafi <klafi@learner.42.tech>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 14:57:58 by klafi             #+#    #+#             */
-/*   Updated: 2026/01/05 13:57:09 by klafi            ###   ########.fr       */
+/*   Updated: 2026/01/06 15:04:36 by klafi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@
 
 typedef struct meow
 {
-	char	*s;
+	char	s[BUFFER_SIZE];
 	int		len;
-}	t_line;
+	int		idx;
+}	t_buf;
 
-int		find_nl(t_line line);
 char	*get_next_line(int fd);
 
 #endif
